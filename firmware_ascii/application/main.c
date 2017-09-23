@@ -41,6 +41,10 @@ the 1ms period.
 
 void main(void)
 {
+  
+  //u32 u32Example;
+  
+  
   G_u32SystemFlags |= _SYSTEM_INITIALIZING;
 
   /* Low level initialization */
