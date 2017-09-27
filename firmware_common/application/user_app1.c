@@ -136,9 +136,49 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-
+  static bool bChange;
+  static u32  u32Counter1 = 0;
+  static u32  u32Counter2 = 0;
+  static u32  u32Cycle = 0;
+  
+  u32Counter1++;
+  u32Counter2++;
+  if(u32Cycle >= 10)
+  {
+    bChange = 1;
+  }
+  else if(u32Cycle == 0)
+  {
+    bChange = 0;
+  }
+  if(u32Counter1 == 100)
+  {
+    u32Counter1 = 0;
+    if(bChange == 1)
+      u32Cycle--;
+    else
+    {
+      u32Cycle++;
+    } 
+  }
+  if(u32Counter2 <= 10)
+  {
+    if(u32Counter2 > 0 && u32Counter2 <= u32Cycle)
+    {
+      HEARTBEAT_ON();
+    }
+    else if(u32Counter2 > u32Cycle)
+    {
+      HEARTBEAT_OFF();
+    }
+  }
+  else 
+  {
+   u32Counter2 = 0; 
+  }
 } /* end UserApp1SM_Idle() */
     
+
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Handle an error */
@@ -149,5 +189,7 @@ static void UserApp1SM_Error(void)
 
 
 
+/*--------------------
+------------------------------------------------------------------------------------------------*/
 /* End of File                                                                                                        */
 /*--------------------------------------------------------------------------------------------------------------------*/
