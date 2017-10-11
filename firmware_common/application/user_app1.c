@@ -87,7 +87,20 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
- 
+  LedPWM(WHITE, LED_PWM_100);
+  LedOff(PURPLE);
+  LedOff(BLUE);
+  LedOff(CYAN);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+  LedOff(RED);
+  
+  /* Backlight to white */  
+  LedOn(LCD_RED);
+  LedOn(LCD_GREEN);
+  LedOn(LCD_BLUE);
+
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -136,50 +149,111 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  static u32  u32Counter1 = 0;
-  static u32  u32Cycle = 500;
-  static u32  u32Counter2 = 0;
-  static bool bChange;
-  static bool bLightIsOn = FALSE;
-
-  u32Counter1++;/*increase1perms*/
-  u32Counter2++;
-  if(u32Cycle >= 500)
+  static u8 u8ColorIndex = 0;
+  static u16 u16BlinkCount = 0;
+  
+  u16BlinkCount++;
+  if(u16BlinkCount == 400)
   {
-    bChange = 1;
+    LedOff(WHITE);
+    LedPWM(PURPLE, LED_PWM_70);
   }
-  else if(u32Cycle <= 10)
+  else if( u16BlinkCount == 1000)
   {
-    bChange = 0;
+    LedOff(PURPLE);
+    LedPWM(BLUE, LED_PWM_50);
   }
-  if(u32Counter1 == u32Cycle)
+  else if( u16BlinkCount == 1500)
   {
-    u32Counter1 = 0;
-    if(bLightIsOn)
-    {
-      HEARTBEAT_OFF();
-      bLightIsOn = FALSE;
-    }
-    else
-    {
-      HEARTBEAT_ON();
-      bLightIsOn = TRUE;
-    }
-    if(u32Counter2 >= COUNTER_LIMIT_MS)
-    {
-      u32Counter2 = 0;
-      if(bChange == 1)
-      {
-        u32Cycle = u32Cycle/2;
-      }
-      else
-      {
-        u32Cycle = u32Cycle*2;
-      }
-    }
-  } 
- 
- } /* end UserApp1SM_Idle() */
+    LedOff(BLUE);
+    LedPWM(CYAN, LED_PWM_30); 
+  }
+  else if(u16BlinkCount == 1900)
+  {
+    LedOff(CYAN);
+    LedPWM(GREEN, LED_PWM_20);
+  }
+  else if(u16BlinkCount == 2300)
+  {
+  LedOff(GREEN);
+  LedPWM(YELLOW, LED_PWM_15);
+  }
+  else if(u16BlinkCount == 2500)
+  {
+    LedOff(YELLOW);
+    LedPWM(ORANGE, LED_PWM_10);
+  }
+  else if(u16BlinkCount == 2600)
+  {
+    LedOff(ORANGE);
+    LedPWM(RED, LED_PWM_5);
+    u8ColorIndex++;
+  }
+  else if(u16BlinkCount == 2650)
+  {
+    u16BlinkCount = 0;
+    LedOn(WHITE);
+    LedOff(PURPLE);
+    LedOff(BLUE);
+    LedOff(CYAN);
+    LedOff(GREEN);
+    LedOff(YELLOW);
+    LedOff(ORANGE);
+    LedOff(RED);
+  }
+  if(u8ColorIndex == 7)
+  {
+    u8ColorIndex = 0;
+  }
+  /* Set the backlight color: white (all), 
+  purple (blue + red), blue, cyan (blue + green), 
+  green, yellow (green + red), red */
+  switch(u8ColorIndex)
+  {
+  case 0: /* white */
+    LedOn(LCD_RED);
+    LedOn(LCD_GREEN);
+    LedOn(LCD_BLUE);
+    break;
+    
+  case 1: /* purple */
+    LedOn(LCD_RED);
+    LedOff(LCD_GREEN);
+    LedOn(LCD_BLUE);
+    break;
+    
+  case 2: /* blue */
+    LedOff(LCD_RED);
+    LedOff(LCD_GREEN);
+    LedOn(LCD_BLUE);
+    break;
+  case 3: /* cyan */
+    LedOff(LCD_RED);
+    LedOn(LCD_GREEN);
+    LedOn(LCD_BLUE);
+    break;
+  case 4: /* green */
+    LedOff(LCD_RED);
+    LedOn(LCD_GREEN);
+    LedOff(LCD_BLUE);
+    break;
+  case 5: /* yellow */
+    LedOn(LCD_RED);
+    LedOn(LCD_GREEN);
+    LedOff(LCD_BLUE);
+    break;
+  case 6: /* red */
+    LedOn(LCD_RED);
+    LedOff(LCD_GREEN);
+    LedOff(LCD_BLUE);
+    break;
+  default: /* off */
+    LedOff(LCD_RED);
+    LedOff(LCD_GREEN);
+    LedOff(LCD_BLUE);
+    break;
+  }
+} /* end UserApp1SM_Idle() */
     
 
 /*-------------------------------------------------------------------------------------------------------------------*/
