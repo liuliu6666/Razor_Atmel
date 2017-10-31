@@ -87,7 +87,14 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
- 
+ LedOff(WHITE);
+ LedOff(PURPLE);
+ LedOff(BLUE);
+ LedOff(CYAN);
+ LedOff(GREEN);
+ LedOff(YELLOW);
+ LedOff(ORANGE);
+ LedOn(RED);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -136,6 +143,114 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
+  static u8 au8PinNum[10]={1,2,2,1,2,2,0,0,0,0};
+  static u8 au8InPut[10];
+  static u32 u32Count1=0;
+  static u32 u32Count2=0;
+  static bool bEqual = TRUE;
+  static u8 u8Count1=0;
+  static u8 u8Count2=0;
+  static bool bMode = FALSE;
+  static bool bReset = FALSE;
+   
+  if(IsButtonHeld(BUTTON3,2000))
+  {
+    LedBlink(RED,LED_1HZ);
+    LedBlink(GREEN,LED_1HZ);
+    bMode = TRUE;
+  }
+  if(bMode==TRUE)
+  {
+    if(WasButtonPressed(BUTTON0))
+    {
+      ButtonAcknowledge(BUTTON0);
+      au8PinNum[u32Count2]=BUTTON0;
+      u32Count2++;
+    }
+    if(WasButtonPressed(BUTTON1))
+    {
+      ButtonAcknowledge(BUTTON1);
+      au8PinNum[u32Count2]=BUTTON1;
+      u32Count2++;
+    }
+    if(WasButtonPressed(BUTTON2))
+    {
+      ButtonAcknowledge(BUTTON2);
+      au8PinNum[u32Count2]=BUTTON2;
+      u32Count2++;
+    }
+    if(WasButtonPressed(BUTTON3))
+    {
+      ButtonAcknowledge(BUTTON3);
+      u32Count2=0;
+      LedOff(RED);
+      LedOff(GREEN);
+      bMode=FALSE;
+    }    
+  }
+    
+  if(WasButtonPressed(BUTTON0))
+  {
+    ButtonAcknowledge(BUTTON0);
+    au8InPut[u32Count1]=BUTTON0;
+    u32Count1++;
+  }
+  if(WasButtonPressed(BUTTON1))
+  {
+    ButtonAcknowledge(BUTTON1);
+    au8InPut[u32Count1]=BUTTON1;
+    u32Count1++;
+  }
+  if(WasButtonPressed(BUTTON2))
+  {
+    ButtonAcknowledge(BUTTON2);
+    au8InPut[u32Count1]=BUTTON2;
+    u32Count1++;
+  }
+  if(bReset==FALSE)
+  {
+    if(WasButtonPressed(BUTTON3))
+    {
+      ButtonAcknowledge(BUTTON3);
+      u32Count1=0;
+      for(u8Count1=0;u8Count1<10;u8Count1++)
+      {
+        if(au8InPut[u8Count1]!=au8PinNum[u8Count1])
+        {
+          bEqual=FALSE;
+          break;
+        }
+      }
+      if(bEqual)
+      {
+        LedOff(RED);
+        LedBlink(GREEN,LED_1HZ);
+      }
+      else
+      {
+        LedOff(RED);
+        LedBlink(RED,LED_1HZ);
+        bEqual=TRUE;
+      }
+      bReset=TRUE;
+    }
+    
+  }
+  else
+  {
+    if(WasButtonPressed(BUTTON3))
+    {
+      for(u8Count2=0;u8Count2<10;u8Count2++)
+      {
+        au8InPut[u8Count2]=0;
+      }
+
+      ButtonAcknowledge(BUTTON3);
+      LedOff(GREEN);
+      LedOn(RED);
+      bReset=FALSE;
+    }
+  }
 
 } /* end UserApp1SM_Idle() */
     
