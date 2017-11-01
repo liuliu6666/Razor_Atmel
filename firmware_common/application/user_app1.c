@@ -152,7 +152,7 @@ static void UserApp1SM_Idle(void)
   static u8 u8Count2=0;
   static bool bMode = FALSE;
   static bool bReset = FALSE;
-   
+/* Change password*/
   if(IsButtonHeld(BUTTON3,2000))
   {
     LedBlink(RED,LED_1HZ);
@@ -179,7 +179,7 @@ static void UserApp1SM_Idle(void)
       au8PinNum[u32Count2]=BUTTON2;
       u32Count2++;
     }
-    if(WasButtonPressed(BUTTON3))
+    if(WasButtonPressed(BUTTON3))/* Make the key OK*/
     {
       ButtonAcknowledge(BUTTON3);
       u32Count2=0;
@@ -188,7 +188,7 @@ static void UserApp1SM_Idle(void)
       bMode=FALSE;
     }    
   }
-    
+/* Enter password*/
   if(WasButtonPressed(BUTTON0))
   {
     ButtonAcknowledge(BUTTON0);
@@ -209,7 +209,7 @@ static void UserApp1SM_Idle(void)
   }
   if(bReset==FALSE)
   {
-    if(WasButtonPressed(BUTTON3))
+    if(WasButtonPressed(BUTTON3))/* To determine whether or not they are equal */
     {
       ButtonAcknowledge(BUTTON3);
       u32Count1=0;
@@ -238,7 +238,7 @@ static void UserApp1SM_Idle(void)
   }
   else
   {
-    if(WasButtonPressed(BUTTON3))
+    if(WasButtonPressed(BUTTON3)) /* Be locked */
     {
       for(u8Count2=0;u8Count2<10;u8Count2++)
       {
