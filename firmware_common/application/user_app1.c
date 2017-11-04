@@ -53,6 +53,7 @@ extern volatile u32 G_u32SystemTime1ms;                /* From board-specific so
 extern volatile u32 G_u32SystemTime1s;                 /* From board-specific source file */
 
 
+
 /***********************************************************************************************************************
 Global variable definitions with scope limited to this local application.
 Variable names shall start with "UserApp1_" and be declared as static.
@@ -87,6 +88,8 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  PWMAudioSetFrequency(BUZZER1,1000);
+  PWMAudioOff(BUZZER1);
  
   /* If good initialization, set state to Idle */
   if( 1 )
@@ -136,6 +139,87 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
+  static bool bSet=FALSE;
+  if(bSet==FALSE)
+  {
+  if(IsButtonPressed(BUTTON0)&&!IsButtonPressed(BUTTON1)&&!IsButtonPressed(BUTTON2)&&!IsButtonPressed(BUTTON3))
+  {
+    //ButtonAcknowledge(BUTTON0);
+    PWMAudioSetFrequency(BUZZER1,262);
+    bSet=TRUE;
+  }
+  if(!IsButtonPressed(BUTTON0)&&IsButtonPressed(BUTTON1)&&!IsButtonPressed(BUTTON2)&&!IsButtonPressed(BUTTON3))
+  {
+   // ButtonAcknowledge(BUTTON1);
+    PWMAudioSetFrequency(BUZZER1,294);
+    bSet=TRUE;
+  }
+  if(!IsButtonPressed(BUTTON0)&&!IsButtonPressed(BUTTON1)&&IsButtonPressed(BUTTON2)&&!IsButtonPressed(BUTTON3))
+  {
+   // ButtonAcknowledge(BUTTON2);
+    PWMAudioSetFrequency(BUZZER1,330);
+    bSet=TRUE;
+  }
+  if(!IsButtonPressed(BUTTON0)&&!IsButtonPressed(BUTTON1)&&!IsButtonPressed(BUTTON2)&&IsButtonPressed(BUTTON3))
+  {
+    //ButtonAcknowledge(BUTTON3);
+    PWMAudioSetFrequency(BUZZER1,392);
+    bSet=TRUE;
+  }
+  }
+
+
+    if(bSet==TRUE)
+    {
+  
+  
+  
+     if(IsButtonPressed(BUTTON0)||IsButtonPressed(BUTTON1)||IsButtonPressed(BUTTON2)||IsButtonPressed(BUTTON3))
+     {
+        PWMAudioOn(BUZZER1);
+       
+      }
+      else
+      {
+        PWMAudioOff(BUZZER1);
+        bSet=FALSE;
+      }
+    }
+ /* if(IsButtonPressed(BUTTON1))
+  {
+    PWMAudioOn(BUZZER1);
+    bSet=FALSE;
+  }
+  else
+  {
+    PWMAudioOff(BUZZER1);
+    bSet=FALSE;
+  }
+
+  if(IsButtonPressed(BUTTON2))
+  {
+    PWMAudioOn(BUZZER1);
+    bSet=FALSE;
+  }
+  else
+  {
+    PWMAudioOff(BUZZER1);
+    bSet=FALSE;
+  }
+
+  if(IsButtonPressed(BUTTON3))
+  {
+    PWMAudioOn(BUZZER1);
+    bSet=FALSE;
+  }
+  else
+  {
+    PWMAudioOff(BUZZER1);
+    bSet=FALSE;
+  }
+  }*/
+
+
 
 } /* end UserApp1SM_Idle() */
     
