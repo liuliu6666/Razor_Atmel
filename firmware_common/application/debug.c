@@ -99,6 +99,9 @@ extern u8 G_au8MessageFAIL[];                            /* From utilities.c */
 extern u8 G_au8MessageON[];                              /* From utilities.c */
 extern u8 G_au8MessageOFF[];                             /* From utilities.c */
 
+extern u8 G_au8DebugScanfBuffer[];  /* From debug.c */
+extern u8 G_u8DebugScanfCharCount;  /* From debug.c */
+
 
 /***********************************************************************************************************************
 Global variable definitions with scope limited to this local application.

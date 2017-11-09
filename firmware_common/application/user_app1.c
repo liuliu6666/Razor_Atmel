@@ -43,6 +43,13 @@ All Global variable names shall start with "G_UserApp1"
 /* New variables */
 volatile u32 G_u32UserApp1Flags;                       /* Global state flags */
 
+/****************************************************************
+Global variable definitions with scope limited to this application.
+Variable names shall start with "UserApp_" and be static.
+*****************************************************************/
+/* Char buffer: */
+static u8 UserApp_au8UserInputBuffer[U16_USER_INPUT_BUFFER_SIZE  ];  
+
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
@@ -87,6 +94,24 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  /*u8 u8String[] = "A string to print that returns cursor to start of next line.\n\r";
+  u8 u8String2[] = "Here's a number: ";
+  u8 u8String3[] = " < The 'cursor' was here after the number.";
+  u32 u32Number = 1234567;
+  
+  DebugPrintf(u8String);
+  DebugPrintf(u8String2);
+  DebugPrintNumber(u32Number);
+  DebugPrintf(u8String3);
+  DebugLineFeed();
+  DebugPrintf(u8String3);
+  DebugLineFeed();*/
+
+  for(u16 i = 0; i < U16_USER_INPUT_BUFFER_SIZE  ; i++)
+  {
+    UserApp_au8UserInputBuffer[i] = 0;
+  }
+
  
   /* If good initialization, set state to Idle */
   if( 1 )
@@ -136,6 +161,52 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
+  extern u8 G_au8DebugScanfBuffer[];  /* From debug.c */
+  extern u8 G_u8DebugScanfCharCount;  /* From debug.c */
+  
+  static u8 au8Name[]={"Liuliu"};//Name
+  u8 u8CharCount;
+  static u32 u32Number=0;
+  static u16 i=0;
+
+  for(i = 0; i < G_u8DebugScanfCharCount; i++)//Judge name times
+  {
+    if(G_au8DebugScanfBuffer[i]==au8Name[0])
+    {
+      if(G_au8DebugScanfBuffer[i+1]==au8Name[1])
+      {
+        if(G_au8DebugScanfBuffer[i+2]==au8Name[2])
+        {
+          if(G_au8DebugScanfBuffer[i+3]==au8Name[3])
+          {
+            if(G_au8DebugScanfBuffer[i+4]==au8Name[4])
+            {
+              if(G_au8DebugScanfBuffer[i+5]==au8Name[5])
+              {
+                u32Number=u32Number+1;
+                u8CharCount=DebugScanf(UserApp_au8UserInputBuffer);
+                UserApp_au8UserInputBuffer[u8CharCount]='\0';
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if(WasButtonPressed(BUTTON0))
+  {
+    ButtonAcknowledge(BUTTON0);
+    DebugLineFeed();
+    DebugPrintNumber(u32Number);//Output
+    u32Number=0;
+    DebugLineFeed();
+    u8CharCount=DebugScanf(UserApp_au8UserInputBuffer);
+    UserApp_au8UserInputBuffer[u8CharCount]='\0';
+    for(u16 j=0;j<U16_USER_INPUT_BUFFER_SIZE;j++)
+    {
+      UserApp_au8UserInputBuffer[j]=0;
+    }
+  }
 
 } /* end UserApp1SM_Idle() */
     
