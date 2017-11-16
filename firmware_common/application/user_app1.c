@@ -171,14 +171,17 @@ static void UserApp1SM_Idle(void)
   static u8 u8Judge=0;
   
   
-  static u16 au16NotesRight[]    = {F5, F5, F5, F5, F5, E5, D5, E5, F5, G5, A5, A5, A5, A5, A5, G5, F5, G5, A5, A5S, C6, F5, F5, D6, C6, A5S, A5, G5, F5, NO, NO};
-  static u16 au16DurationRight[] = {QN, QN, HN, EN, EN, EN, EN, EN, EN, QN, QN, QN, HN, EN, EN, EN, EN, EN, EN, QN,  HN, HN, EN, EN, EN, EN,  QN, QN, HN, HN, FN};
-  static u16 au16NoteTypeRight[] = {RT, RT, HT, RT, RT, RT, RT, RT, RT, RT, RT, RT, HT, RT, RT, RT, RT, RT, RT, RT,  RT, HT, RT, RT, RT, RT,  RT, RT, RT, HT, HT};
+  //static u16 au16NotesRight[]    = {F5, F5, F5, F5, F5, E5, D5, E5, F5, G5, A5, A5, A5, A5, A5, G5, F5, G5, A5, A5S, C6, F5, F5, D6, C6, A5S, A5, G5, F5, NO, NO};
+  //static u16 au16DurationRight[] = {QN, QN, HN, EN, EN, EN, EN, EN, EN, QN, QN, QN, HN, EN, EN, EN, EN, EN, EN, QN,  HN, HN, EN, EN, EN, EN,  QN, QN, HN, HN, FN};
+  //static u16 au16NoteTypeRight[] = {RT, RT, HT, RT, RT, RT, RT, RT, RT, RT, RT, RT, HT, RT, RT, RT, RT, RT, RT, RT,  RT, HT, RT, RT, RT, RT,  RT, RT, RT, HT, HT};
   static u8 u8IndexRight = 0;
   static u32 u32RightTimer = 0;
   static u16 u16CurrentDurationRight = 0;
   static u16 u16NoteSilentDurationRight = 0;
   static bool bNoteActiveNextRight = TRUE;
+  static u16 au16NotesRight[]    = {NO,F4,G4,A5,A5,G4,A5,C5,G4,G4,G4,C4,C4,F4,F4,E4,F4,A5,E4,E4,E4,C4,D4,D4,C4,D4,A4,C4,C4,NO,A5,A5,A5,G4,D4,D4,G4,G4,G4,NO,F4,G4,A5,G4,A5,C5};
+  static u16 au16DurationRight[] = {QN,EN,EN,QN,EN,EN,QN,QN,QN,QN,QN,EN,EN,QN,EN,EN,QN,QN,QN,QN,QN,QN,QN,EN,EN,QN,QN,QN,QN,EN,EN,EN,EN,QN,EN,QN,QN,QN,QN,QN,EN,EN,QN,EN,QN,QN};
+  static u16 au16NoteTypeRight[] = {RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT,RT};
   
   u8 u8CurrentIndex;
 
@@ -323,6 +326,7 @@ static void UserApp1SM_Idle(void)
     ButtonAcknowledge(BUTTON3);
     u8Judge=0;
     u8LeftorRight=0;
+    PWMAudioOff(BUZZER1);
     LCDCommand(LCD_CLEAR_CMD);
     LCDMessage(LINE1_START_ADDR,au8Message1);
     LCDMessage(LINE2_START_ADDR,au8Message2);
