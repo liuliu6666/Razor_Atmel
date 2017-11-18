@@ -9,7 +9,11 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
+<<<<<<< HEAD
 Checksum=-1510881041
+=======
+Checksum=986132165
+>>>>>>> parent of fc73206... 1111
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
