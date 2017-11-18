@@ -394,6 +394,10 @@ static void UserApp1SM_Idle(void)
     }
   }
   
+  else
+  {
+    PWMAudioOff(BUZZER1);
+  }
   
 } /* end UserApp1SM_Idle() */
 
