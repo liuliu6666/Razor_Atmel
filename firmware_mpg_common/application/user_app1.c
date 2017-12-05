@@ -281,6 +281,19 @@ static void UserApp1SM_Idle(void)
   }
   if (u8State == 4)
   {
+    if(LedDisplayPrintListLine(u8Show)){
+       u8Show++; 
+    }else{
+      if(u8Show==0){
+        DebugLineFeed();
+        DebugPrintf("USERLIST IS EMPTY");
+        DebugLineFeed();
+      }
+      u8Show=0;
+      u8State = 5;
+    }
+    
+#if 0
     for (u8Show=0;u8Show<u8List;u8Show++)
     {
       LedDisplayPrintListLine(u8Show);
@@ -289,6 +302,7 @@ static void UserApp1SM_Idle(void)
     {
       u8State = 5;
     }
+#endif
   }
   if (u8State ==5)
   {
