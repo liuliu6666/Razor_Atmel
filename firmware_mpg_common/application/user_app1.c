@@ -198,74 +198,30 @@ static void UserApp1SM_AntChannelAssign()
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  static u8 au8TestMessage[] = {0, 0, 0, 0, 0xA5, 0, 0, 0};
-  u8 au8DataContent[] = "xxxxxxxxxxxxxxxx";
-  
-  /* Check all the buttons and update au8TestMessage according to the button state */ 
-  au8TestMessage[0] = 0x00;
-  if( IsButtonPressed(BUTTON0) )
-  {
-    au8TestMessage[0] = 0xff;
-  }
-  
-  au8TestMessage[1] = 0x00;
-  if( IsButtonPressed(BUTTON1) )
-  {
-    au8TestMessage[1] = 0xff;
-  }
-
-#ifdef EIE1
-  au8TestMessage[2] = 0x00;
-  if( IsButtonPressed(BUTTON2) )
-  {
-    au8TestMessage[2] = 0xff;
-  }
-
-  au8TestMessage[3] = 0x00;
-  if( IsButtonPressed(BUTTON3) )
-  {
-    au8TestMessage[3] = 0xff;
-  }
-#endif /* EIE1 */
-  
-  if( AntReadAppMessageBuffer() )
-  {
-     /* New message from ANT task: check what it is */
-    if(G_eAntApiCurrentMessageClass == ANT_DATA)
-    {
-      /* We got some data: parse it into au8DataContent[] */
-      for(u8 i = 0; i < ANT_DATA_BYTES; i++)
-      {
-        au8DataContent[2 * i]     = HexToASCIICharUpper(G_au8AntApiCurrentMessageBytes[i] / 16);
-        au8DataContent[2 * i + 1] = HexToASCIICharUpper(G_au8AntApiCurrentMessageBytes[i] % 16);
-      }
-
-#ifdef EIE1
-      LCDMessage(LINE2_START_ADDR, au8DataContent);
-#endif /* EIE1 */
-      
-#ifdef MPG2
-#endif /* MPG2 */
-      
-    }
-    else if(G_eAntApiCurrentMessageClass == ANT_TICK)
-    {
-     /* Update and queue the new message data */
-      au8TestMessage[7]++;
-      if(au8TestMessage[7] == 0)
-      {
-        au8TestMessage[6]++;
-        if(au8TestMessage[6] == 0)
-        {
-          au8TestMessage[5]++;
-        }
-      }
-      AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, au8TestMessage);
-    }
-  } /* end AntReadData() */
-  
+  static u8 u8State;
+  u8 u8Data[] = {0x16,0x03,0x25,0x36,0x23,0x24};  
+  u8State = CalculateChecksum(u8Data);
 } /* end UserApp1SM_Idle() */
 
+void AntCalculateChecksum(u8* pu8TargetMessage_)
+{
+  u8* pu8Parser = pu8TargetMessage_;
+  u8 u8Length;
+  u8 u8Checksum;
+  
+  u8Check
+
+static u8 CalculateChecksum(u8 *u8Data)
+{
+  u8 u8Length = u8Data[1]+3;
+  u8 u8Checksum=0;
+  
+  for(u8 i=0;i<u8Length;i++)
+  {
+    u8Checksum = u8Checksum ^ u8Data[i];
+  }
+  return u8Checksum;
+}/* end AntCalculateChecksum();
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Handle an error (for now, do nothing) */

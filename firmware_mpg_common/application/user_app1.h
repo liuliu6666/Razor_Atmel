@@ -70,7 +70,7 @@ static void UserApp1SM_Idle(void);
 
 static void UserApp1SM_Error(void);         
 
-
+u8 CalculateChecksum(u8 *u8Data);
 #endif /* __USER_APP1_H */
 
 
