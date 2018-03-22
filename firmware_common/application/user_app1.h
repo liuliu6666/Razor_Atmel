@@ -29,6 +29,9 @@ Type Definitions
 Constants / Definitions
 **********************************************************************************************************************/
 
+/* Size of buffer for scanf messages */
+#define U16_USER_INPUT_BUFFER_SIZE  (u16)(DEBUG_SCANF_BUFFER_SIZE + 1)    
+
 
 /**********************************************************************************************************************
 Function Declarations

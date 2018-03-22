@@ -52,6 +52,8 @@ extern volatile u32 G_u32ApplicationFlags;             /* From main.c */
 extern volatile u32 G_u32SystemTime1ms;                /* From board-specific source file */
 extern volatile u32 G_u32SystemTime1s;                 /* From board-specific source file */
 
+extern u8 G_au8DebugScanfBuffer[];  /* From debug.c */
+extern u8 G_u8DebugScanfCharCount;  /* From debug.c */
 
 /***********************************************************************************************************************
 Global variable definitions with scope limited to this local application.
@@ -60,6 +62,8 @@ Variable names shall start with "UserApp1_" and be declared as static.
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
 
+/* Char buffer: */
+static u8 UserApp_au8UserInputBuffer[U16_USER_INPUT_BUFFER_SIZE  ];  
 
 /**********************************************************************************************************************
 Function Definitions
@@ -87,7 +91,23 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
- 
+  for(u16 i = 0; i < U16_USER_INPUT_BUFFER_SIZE  ; i++)
+  {
+    UserApp_au8UserInputBuffer[i] = 0;
+  }
+
+  LedOff(WHITE);
+  LedOff(PURPLE);
+  LedOff(BLUE);
+  LedOff(CYAN);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(RED);
+  LedOff(ORANGE);
+  LCDCommand(LCD_CLEAR_CMD);
+
+  PWMAudioSetFrequency(BUZZER1, 200);
+
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -136,6 +156,109 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
+  u8 u8DebugOut1[] = "Entering state 1";
+  u8 u8DebugOut2[] = "Entering state 2";
+  u8 u8LCD1[] = "STATE 1";
+  u8 u8LCD2[] = "STATE 2";
+  u8 u8State = 0;
+  static u32 u32BlinkCount = 0;
+  static u8 u8Counter = 0;
+  static bool bBuzzer1 = FALSE;
+  u8 u8CharCount;
+
+  if(G_au8DebugScanfBuffer[G_u8DebugScanfCharCount-1] == 0x0D)
+  {
+    u8CharCount = DebugScanf(UserApp_au8UserInputBuffer);
+    UserApp_au8UserInputBuffer[u8CharCount] = '\0';
+    DebugLineFeed();
+  }
+
+  if(WasButtonPressed(BUTTON1)||UserApp_au8UserInputBuffer[0] == 0x31)
+  {
+    ButtonAcknowledge(BUTTON1);
+    UserApp_au8UserInputBuffer[0] = 0x00;
+    LCDCommand(LCD_CLEAR_CMD);
+    bBuzzer1 = FALSE;
+    u8State = 1;
+  }
+  if(WasButtonPressed(BUTTON2)||UserApp_au8UserInputBuffer[0] == 0x32)
+  {
+    ButtonAcknowledge(BUTTON2);
+    UserApp_au8UserInputBuffer[0] = 0x00;
+    LCDCommand(LCD_CLEAR_CMD);
+    bBuzzer1 = TRUE;
+    u8State = 2;
+  }
+  if(u8State == 1)
+  {
+    DebugPrintf(u8DebugOut1);
+    DebugLineFeed();
+    
+    LCDMessage(LINE1_START_ADDR, u8LCD1);
+    
+    LedOn(WHITE);
+    LedOn(PURPLE);
+    LedOn(BLUE);
+    LedOn(CYAN);
+    LedOff(GREEN);
+    LedOff(YELLOW);
+    LedOff(RED);
+    LedOff(ORANGE);
+    
+    LedOn(LCD_RED);
+    LedOff(LCD_GREEN);
+    LedOn(LCD_BLUE);
+
+    PWMAudioOff(BUZZER1);
+    u8State = 0;
+  }
+  if(u8State == 2)
+  {
+    DebugPrintf(u8DebugOut2);
+    DebugLineFeed();
+
+    LCDMessage(LINE2_START_ADDR, u8LCD2);
+    
+    LedBlink(GREEN,LED_1HZ);
+    LedBlink(YELLOW,LED_2HZ);
+    LedBlink(ORANGE,LED_4HZ);
+    LedBlink(RED,LED_8HZ);
+    LedOff(WHITE);
+    LedOff(PURPLE);
+    LedOff(BLUE);
+    LedOff(CYAN);
+    
+    LedOn(LCD_RED);
+    LedPWM(LCD_GREEN, LED_PWM_35);
+    LedOff(LCD_BLUE);
+
+    u8State = 0;
+  }
+  if(bBuzzer1)
+  {
+    u32BlinkCount++;
+
+    if(u32BlinkCount == 100)
+    {
+      u32BlinkCount = 0;
+      PWMAudioOff(BUZZER1);
+      u8Counter++;
+      if(u8Counter == 9)
+      {
+        PWMAudioOn(BUZZER1);
+      }
+      if(u8Counter == 10)
+      {
+        PWMAudioOff(BUZZER1);
+        u8Counter = 0;
+      }
+    }
+  }
+ 
+
+
+  
+
 
 } /* end UserApp1SM_Idle() */
     
