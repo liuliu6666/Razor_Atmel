@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-1487067504
+Checksum=-1481111357
 [JLinkDriver]
 CStepIntDis=_ 0
 WatchCond=_ 0
@@ -43,6 +43,8 @@ UnspecRange=1
 ActionState=1
 [CodeCoverage]
 Enabled=_ 0
+[struct_types]
+Fmt0=AntExtendedDataType-u8Channel	3	0
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
