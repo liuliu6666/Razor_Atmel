@@ -58,6 +58,16 @@ static void UserApp1SM_Idle(void);
 
 static void UserApp1SM_Error(void);         
 
+void MobileInput(void);
+void VolumeUp(void);
+void VolumeDown(void);
+void Aud2(void);
+void Aud1(void);
+void SilentMode(void);
+void RedBlink(void);
+void Adc12(void);
+void ChannelChange(void);
+
 
 #endif /* __USER_APP1_H */
 
