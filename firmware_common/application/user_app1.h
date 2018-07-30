@@ -45,7 +45,9 @@ Function Declarations
 void UserApp1Initialize(void);
 void UserApp1RunActiveState(void);
 
-
+void MBI_data(u8 k);
+void CD_DATA(u8 n);
+void delay(u16 l);
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
