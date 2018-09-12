@@ -60,22 +60,22 @@ Variable names shall start with "UserApp1_" and be declared as static.
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
 
-static u16 LED_data[5][32]={
+//static u16 LED_data[5][32]={
+//
+//{0x01,0x00,0x01,0x00,0xFF,0xFE,0x01,0x00,0x01,0x00,0x7F,0xFC,0x48,0x24,0x44,0x44,0x4F,0xE4,0x41,0x04,0x41,0x04,0x5F,0xF4,0x41,0x04,0x41,0x04,0x41,0x14,0x40,0x08},/*"南",0*/
+//
+//{0x02,0x00,0x01,0x00,0xFF,0xFE,0x00,0x00,0x00,0x00,0x1F,0xF0,0x10,0x10,0x10,0x10,0x10,0x10,0x1F,0xF0,0x01,0x00,0x11,0x10,0x11,0x08,0x21,0x04,0x45,0x04,0x02,0x00},/*"京",1*/
+//
+//{0x00,0x00,0x00,0x00,0x7F,0xFC,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0xFF,0xFE,0x00,0x00,0x00,0x00},/*"工",2*/
+//
+//{0x08,0x00,0x1D,0xFC,0xF1,0x04,0x11,0x04,0x11,0x04,0xFD,0xFC,0x10,0x00,0x30,0x00,0x39,0xFE,0x54,0x20,0x54,0x20,0x91,0xFC,0x10,0x20,0x10,0x20,0x13,0xFE,0x10,0x00},/*"程",3*/
+//
+//{0x22,0x08,0x11,0x08,0x11,0x10,0x00,0x20,0x7F,0xFE,0x40,0x02,0x80,0x04,0x1F,0xE0,0x00,0x40,0x01,0x80,0xFF,0xFE,0x01,0x00,0x01,0x00,0x01,0x00,0x05,0x00,0x02,0x00},/*"学",4*/
+//
+//};
+//
+//static u8 LED_data1[10];
 
-{0x01,0x00,0x01,0x00,0xFF,0xFE,0x01,0x00,0x01,0x00,0x7F,0xFC,0x48,0x24,0x44,0x44,0x4F,0xE4,0x41,0x04,0x41,0x04,0x5F,0xF4,0x41,0x04,0x41,0x04,0x41,0x14,0x40,0x08},/*"南",0*/
-
-{0x02,0x00,0x01,0x00,0xFF,0xFE,0x00,0x00,0x00,0x00,0x1F,0xF0,0x10,0x10,0x10,0x10,0x10,0x10,0x1F,0xF0,0x01,0x00,0x11,0x10,0x11,0x08,0x21,0x04,0x45,0x04,0x02,0x00},/*"京",1*/
-
-{0x00,0x00,0x00,0x00,0x7F,0xFC,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0xFF,0xFE,0x00,0x00,0x00,0x00},/*"工",2*/
-
-{0x08,0x00,0x1D,0xFC,0xF1,0x04,0x11,0x04,0x11,0x04,0xFD,0xFC,0x10,0x00,0x30,0x00,0x39,0xFE,0x54,0x20,0x54,0x20,0x91,0xFC,0x10,0x20,0x10,0x20,0x13,0xFE,0x10,0x00},/*"程",3*/
-
-{0x22,0x08,0x11,0x08,0x11,0x10,0x00,0x20,0x7F,0xFE,0x40,0x02,0x80,0x04,0x1F,0xE0,0x00,0x40,0x01,0x80,0xFF,0xFE,0x01,0x00,0x01,0x00,0x01,0x00,0x05,0x00,0x02,0x00},/*"学",4*/
-
-
-
-};
-static u8 LED_data1[10];
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
@@ -101,14 +101,65 @@ Promises:
   - 
 */
 void UserApp1Initialize(void)
-{
- AT91C_BASE_PIOA->PIO_PER = PA_12_BLADE_UPOMI|PA_11_BLADE_UPIMO|PA_14_BLADE_MOSI|PA_15_BLADE_SCK;//A12 A11 A14 A15启用寄存器
- AT91C_BASE_PIOA->PIO_OER = PA_12_BLADE_UPOMI|PA_11_BLADE_UPIMO|PA_14_BLADE_MOSI|PA_15_BLADE_SCK;//A12=LE A11=OE A14=SDI A15=CLK输出使能
- AT91C_BASE_PIOA->PIO_PER = PA_03_HSMCI_MCCK|PA_04_HSMCI_MCCDA|PA_05_HSMCI_MCDA0|PA_06_HSMCI_MCDA1|PA_07_HSMCI_MCDA2|PA_08_SD_CS_MCDA3;//A3-A8启用寄存器
- AT91C_BASE_PIOA->PIO_OER = PA_03_HSMCI_MCCK|PA_04_HSMCI_MCCDA|PA_05_HSMCI_MCDA0|PA_06_HSMCI_MCDA1|PA_07_HSMCI_MCDA2|PA_08_SD_CS_MCDA3;//输出使能
- 
- AT91C_BASE_PIOA->PIO_SODR = PA_03_HSMCI_MCCK;//CD_STB1=1
- 
+{ 
+  /* Enable PIO and output */
+  AT91C_BASE_PIOA->PIO_PER = PA_00_GND;
+  AT91C_BASE_PIOA->PIO_PER = PA_05_A;
+  AT91C_BASE_PIOA->PIO_PER = PA_08_D;
+  AT91C_BASE_PIOA->PIO_PER = PA_03_CD_STB;
+  AT91C_BASE_PIOA->PIO_PER = PA_07_C;
+  AT91C_BASE_PIOA->PIO_PER = PA_06_B;
+  AT91C_BASE_PIOA->PIO_PER = PA_04_INH;
+  AT91C_BASE_PIOA->PIO_PER = PA_10_I2C_M_SCL;
+  AT91C_BASE_PIOA->PIO_PER = PA_09_I2C_M_SDA;
+  AT91C_BASE_PIOA->PIO_PER = PA_12_M_LE;
+  AT91C_BASE_PIOA->PIO_PER = PA_11_M_OE;
+  AT91C_BASE_PIOA->PIO_PER = PA_15_M_CLK;
+  AT91C_BASE_PIOA->PIO_PER = PA_14_M_SDI;
+  AT91C_BASE_PIOA->PIO_PER = PA_19_U0_PIMO;
+  AT91C_BASE_PIOA->PIO_PER = PA_18_U0_POMI;
+  AT91C_BASE_PIOA->PIO_PER = PB_06_F_SDO;
+  AT91C_BASE_PIOA->PIO_PER = PB_05_F_CS;
+  AT91C_BASE_PIOA->PIO_PER = PB_08_SI;
+  AT91C_BASE_PIOA->PIO_PER = PB_07_SCLK;
+
+  AT91C_BASE_PIOA->PIO_OER = PA_00_GND;
+  AT91C_BASE_PIOA->PIO_OER = PA_05_A;
+  AT91C_BASE_PIOA->PIO_OER = PA_08_D;
+  AT91C_BASE_PIOA->PIO_OER = PA_03_CD_STB;
+  AT91C_BASE_PIOA->PIO_OER = PA_07_C;
+  AT91C_BASE_PIOA->PIO_OER = PA_06_B;
+  AT91C_BASE_PIOA->PIO_OER = PA_04_INH;
+  AT91C_BASE_PIOA->PIO_OER = PA_10_I2C_M_SCL;
+  AT91C_BASE_PIOA->PIO_OER = PA_09_I2C_M_SDA;
+  AT91C_BASE_PIOA->PIO_OER = PA_12_M_LE;
+  AT91C_BASE_PIOA->PIO_OER = PA_11_M_OE;
+  AT91C_BASE_PIOA->PIO_OER = PA_15_M_CLK;
+  AT91C_BASE_PIOA->PIO_OER = PA_14_M_SDI;
+  AT91C_BASE_PIOA->PIO_OER = PA_19_U0_PIMO;
+  AT91C_BASE_PIOA->PIO_OER = PA_18_U0_POMI;
+  AT91C_BASE_PIOA->PIO_OER = PB_06_F_SDO;
+  AT91C_BASE_PIOA->PIO_OER = PB_05_F_CS;
+  AT91C_BASE_PIOA->PIO_OER = PB_08_SI;
+  AT91C_BASE_PIOA->PIO_OER = PB_07_SCLK;
+  
+ /* Initialize the GPIO ports */
+  AT91C_BASE_PIOA->PIO_CODR = PA_00_GND;
+  AT91C_BASE_PIOA->PIO_SODR = PA_03_CD_STB;
+  AT91C_BASE_PIOA->PIO_CODR = PA_04_INH;
+  AT91C_BASE_PIOA->PIO_CODR = PA_05_A;
+  AT91C_BASE_PIOA->PIO_CODR = PA_06_B;
+  AT91C_BASE_PIOA->PIO_CODR = PA_07_C;
+  AT91C_BASE_PIOA->PIO_CODR = PA_08_D;
+  AT91C_BASE_PIOA->PIO_CODR = PA_11_M_OE;
+  AT91C_BASE_PIOA->PIO_SODR = PA_12_M_LE;
+  AT91C_BASE_PIOA->PIO_CODR = PA_14_M_SDI;
+  AT91C_BASE_PIOA->PIO_CODR = PA_15_M_CLK;
+  AT91C_BASE_PIOB->PIO_SODR = PB_05_F_CS;
+  AT91C_BASE_PIOB->PIO_CODR = PB_06_F_SDO;
+  AT91C_BASE_PIOB->PIO_CODR = PB_07_SCLK;
+  AT91C_BASE_PIOB->PIO_CODR = PB_08_SI;
+   
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -157,93 +208,309 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  
-  for(u8 i=0;i<16;i++)
+  bool bRollTemp = FALSE;
+  static u8 u8CD4515Data = 0;
+  static u16 u16RollCounter = 0;
+  static u8 u8MBI5026GFData[7][16][2] = 
   {
-    AT91C_BASE_PIOA->PIO_CODR = PA_04_HSMCI_MCCDA;//INH1=0
-    MBI_data(i);
-    CD_DATA(i);
-    AT91C_BASE_PIOA->PIO_SODR = PA_11_BLADE_UPIMO;//OE=1
+/*    {{0x00,0x80},
+{0x20,0x40},
+{0x10,0x40},
+{0x17,0xFC},
+{0x00,0x10},
+{0x02,0x10},
+{0xF1,0x20},
+{0x10,0xA0},
+{0x10,0x40},
+{0x10,0xA0},
+{0x11,0x10},
+{0x12,0x08},
+{0x14,0x08},
+{0x28,0x00},
+{0x47,0xFE},
+{0x00,0x00},
+    //"这",0
+  },
+  
+    {{0x1F,0xF0},
+{0x10,0x10},
+{0x10,0x10},
+{0x1F,0xF0},
+{0x10,0x10},
+{0x10,0x10},
+{0x1F,0xF0},
+{0x00,0x00},
+{0xFF,0xFE},
+{0x01,0x00},
+{0x11,0x00},
+{0x11,0xF8},
+{0x11,0x00},
+{0x29,0x00},
+{0x45,0x00},
+{0x83,0xFE},
+    //"是",1
+  },*/
+  
+    {{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0xFF,0xFE},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+    //"一",2
+  },
+  
+    {{0x01,0x00},
+{0x01,0x00},
+{0x02,0x80},
+{0x04,0x40},
+{0x08,0x20},
+{0x10,0x10},
+{0x21,0x08},
+{0xC1,0x06},
+{0x01,0x00},
+{0x01,0x00},
+{0x01,0x00},
+{0x01,0x00},
+{0x01,0x00},
+{0x01,0x00},
+{0x01,0x00},
+{0x01,0x00},
+    //"个",3
+  },
+  
+    {{0x00,0x80},
+{0x20,0x40},
+{0x17,0xFC},
+{0x11,0x10},
+{0x82,0x48},
+{0x44,0x84},
+{0x41,0x20},
+{0x13,0xF0},
+{0x10,0x10},
+{0x20,0x88},
+{0xE1,0x50},
+{0x23,0x20},
+{0x25,0x10},
+{0x29,0x48},
+{0x21,0x86},
+{0x01,0x00},
+    //"滚",4
+  },
+
+    {{0x00,0x40},
+{0x00,0x40},
+{0x7C,0x40},
+{0x00,0x40},
+{0x01,0xFC},
+{0x00,0x44},
+{0xFE,0x44},
+{0x20,0x44},
+{0x20,0x44},
+{0x20,0x84},
+{0x48,0x84},
+{0x44,0x84},
+{0xFD,0x04},
+{0x45,0x04},
+{0x02,0x28},
+{0x04,0x10},
+//"动",5
+  },
+
+    {{0x00,0x00},
+{0x1F,0xF0},
+{0x10,0x10},
+{0x10,0x10},
+{0x1F,0xF0},
+{0x10,0x10},
+{0x10,0x10},
+{0x1F,0xF0},
+{0x04,0x40},
+{0x44,0x44},
+{0x24,0x44},
+{0x14,0x48},
+{0x14,0x50},
+{0x04,0x40},
+{0xFF,0xFE},
+{0x00,0x00},
+//"显",6
+  },
+
+    {{0x00,0x00},
+{0x3F,0xF8},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0xFF,0xFE},
+{0x01,0x00},
+{0x01,0x00},
+{0x11,0x10},
+{0x11,0x08},
+{0x21,0x04},
+{0x41,0x02},
+{0x81,0x02},
+{0x05,0x00},
+{0x02,0x00},
+//"示",7
+  },
+
+    {{0x00,0x00},
+{0x3F,0xF8},
+{0x20,0x08},
+{0x20,0x08},
+{0x3F,0xF8},
+{0x24,0x10},
+{0x22,0x20},
+{0x2F,0xF8},
+{0x22,0x20},
+{0x22,0x20},
+{0x3F,0xFC},
+{0x22,0x20},
+{0x42,0x20},
+{0x44,0x20},
+{0x84,0x20},
+{0x08,0x20},
+//"屏",8
+  },
+
+/*    {{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x00,0x00},
+{0x18,0x00},
+{0x24,0x00},
+{0x24,0x00},
+{0x18,0x00},
+{0x00,0x00},
+{0x00,0x00},
+//"。",9
+  },*/
+  };
+
+    //AT91C_BASE_PIOA->PIO_CODR = PA_04_INH;//INH1=0
+    //AT91C_BASE_PIOA->PIO_SODR = PA_11_M_OE;//OE=1
     delay(5);
-    AT91C_BASE_PIOA->PIO_SODR = PA_12_BLADE_UPOMI;//LE=1
-    delay(5);
-    AT91C_BASE_PIOA->PIO_CODR = PA_12_BLADE_UPOMI;//LE=0
-    delay(5);
-    AT91C_BASE_PIOA->PIO_CODR = PA_11_BLADE_UPIMO;//OE=0
-    AT91C_BASE_PIOA->PIO_SODR = PA_04_HSMCI_MCCDA;//INH1=1
-    delay(5);
-  }
+    
+    u16RollCounter++;
+
+    if(u16RollCounter == 100)
+    {
+      u16RollCounter = 0;
+      for(int j=0;j<16;j++)//循环用来显示16行
+      {
+        bRollTemp = (bool)(u8MBI5026GFData[0][j][0] & 0x80);//第一个字的最左边最高位 保护作用
+        for(int i=0;i<7;i++)//每个字
+        {
+          u8MBI5026GFData[i][j][0] = u8MBI5026GFData[i][j][0] << 1;//一个字的某行左移
+          if(u8MBI5026GFData[i][j][1] & 0x80)//如果第二个八位 的最高位为高电平
+          {//则
+            u8MBI5026GFData[i][j][0] = u8MBI5026GFData[i][j][0] | 0x01;//令第一个八位的最低位为高电平
+          }
+          else//否则
+          {
+            u8MBI5026GFData[i][j][0] = u8MBI5026GFData[i][j][0] & 0xFE;//令第一个八位的最低位为低电平
+          }
+          u8MBI5026GFData[i][j][1] = u8MBI5026GFData[i][j][1] << 1;//一个字的第二个八位左移
+          if(i == 6)//如果到第七个字
+          {
+            if(bRollTemp)//如果保护值为高电平
+            {
+              u8MBI5026GFData[i][j][1] = u8MBI5026GFData[i][j][1] | 0x01;//令第二个八位的最低位为高电平
+            }
+            else//否则
+            {
+              u8MBI5026GFData[i][j][1] = u8MBI5026GFData[i][j][1] & 0xFE;//令第二个八位的最低位为低电平
+            }
+          }
+          else//如果没到
+          {
+            if(u8MBI5026GFData[i+1][j][0] & 0x80)//如果下一个字的第一个八位的为高位为高
+            {
+              u8MBI5026GFData[i][j][1] = u8MBI5026GFData[i][j][1] | 0x01;//则令这个字的第二个八位的最低位为高
+            }
+            else//否则
+            {
+              u8MBI5026GFData[i][j][1] = u8MBI5026GFData[i][j][1] & 0xFE;//令这个字的第二个八位的最低位为低
+            }
+          }
+        }
+      }
+    }
+    for(u8 x=0;x<16;x++)
+    {
+      AT91C_BASE_PIOA->PIO_CODR = PA_04_INH;//INH1=0
+      CD_Data(x);
+      for(int m=5;m>0;m--)
+      {
+        MBI5025BF_SendData(u8MBI5026GFData[m-1][x][1]);
+        MBI5025BF_SendData(u8MBI5026GFData[m-1][x][0]);
+      }
+      AT91C_BASE_PIOA->PIO_SODR = PA_11_M_OE;//OE=1
+      delay(5);
+      AT91C_BASE_PIOA->PIO_SODR = PA_12_M_LE;//LE=1
+      delay(5);
+      AT91C_BASE_PIOA->PIO_CODR = PA_12_M_LE;//LE=0
+      delay(5);
+      AT91C_BASE_PIOA->PIO_CODR = PA_11_M_OE;//OE=0
+      AT91C_BASE_PIOA->PIO_SODR = PA_04_INH;//INH1=1
+      delay(5);
+    }
+  
 } /* end UserApp1SM_Idle() */
 
-
-
-void MBI_data(u8 k)
+void MBI5025BF_SendData(u8 u8data)
 {
-//  u8 m;
-//  u8 x;
-  static u8 data;
-  u8 u8Counter=0;
-  u8Counter++;
-
-  for(u8 x=0;x<5;x++)
+  for(u8 j=0;j<8;j++)
   {
-    LED_data1[x*2]=LED_data[x][k*2];
-    LED_data1[x*2+1]=LED_data[x][k*2+1];
+    AT91C_BASE_PIOA->PIO_CODR = PA_15_M_CLK;//CLK=0
+    if((0x01&u8data)==1)AT91C_BASE_PIOA->PIO_SODR = PA_14_M_SDI;//SDI=1
+    else AT91C_BASE_PIOA->PIO_CODR = PA_14_M_SDI;//SDI=0
+    delay(5);
+    AT91C_BASE_PIOA->PIO_SODR = PA_15_M_CLK;//CLK=1
+    delay(5);
+    u8data=u8data>>1;
   }
-  
-//  for(u8 m=5;m>0;m--)
-//  {
-//    for(x=k*2+2;x>(k*2);x--)
-//    {
-  if(u8Counter>=200)
-  {
-    for(u8 a=0;a<10;a++)
-    {
-    LED_data1[a]=LED_data1[a+1];
-    }
-    u8Counter=0;
-  }
-  for(u8 m=10;m>0;m--)
-  {
-//      data=LED_data[m-1][x-1];
-    data=LED_data1[m-1];
-      for(u8 j=0;j<8;j++)
-      {
-        AT91C_BASE_PIOA->PIO_CODR = PA_15_BLADE_SCK;//CLK=0
-        if((0x01&data)==1)AT91C_BASE_PIOA->PIO_SODR = PA_14_BLADE_MOSI;//SDI=1
-        else AT91C_BASE_PIOA->PIO_CODR = PA_14_BLADE_MOSI;//SDI=0
-        delay(5);
-        AT91C_BASE_PIOA->PIO_SODR = PA_15_BLADE_SCK;//CLK=1
-        delay(5);
-        data=data>>1;
-      }
-    
-  }
-  
 }
-void CD_DATA(u8 n)
+void CD_Data(u8 u8data)
 {
-  switch (n)
+  switch (u8data)
   {
-    case 0:AT91C_BASE_PIOA->PIO_CODR = PA_08_SD_CS_MCDA3|PA_07_HSMCI_MCDA2|PA_06_HSMCI_MCDA1|PA_05_HSMCI_MCDA0;break;//0000 C0
-    case 1:AT91C_BASE_PIOA->PIO_CODR = PA_08_SD_CS_MCDA3|PA_07_HSMCI_MCDA2|PA_06_HSMCI_MCDA1;AT91C_BASE_PIOA->PIO_SODR = PA_05_HSMCI_MCDA0;break;//0001 C1
-    case 2:AT91C_BASE_PIOA->PIO_CODR = PA_08_SD_CS_MCDA3|PA_07_HSMCI_MCDA2|PA_05_HSMCI_MCDA0;AT91C_BASE_PIOA->PIO_SODR = PA_06_HSMCI_MCDA1;break;//0010 C2
-    case 3:AT91C_BASE_PIOA->PIO_CODR = PA_08_SD_CS_MCDA3|PA_07_HSMCI_MCDA2;AT91C_BASE_PIOA->PIO_SODR = PA_06_HSMCI_MCDA1|PA_05_HSMCI_MCDA0;break;//0011 C3
+    case 0:AT91C_BASE_PIOA->PIO_CODR = PA_08_D|PA_07_C|PA_06_B|PA_05_A;break;//0000 C0
+    case 1:AT91C_BASE_PIOA->PIO_CODR = PA_08_D|PA_07_C|PA_06_B;                 AT91C_BASE_PIOA->PIO_SODR = PA_05_A;break;//0001 C1
+    case 2:AT91C_BASE_PIOA->PIO_CODR = PA_08_D|PA_07_C|PA_05_A;                 AT91C_BASE_PIOA->PIO_SODR = PA_06_B;break;//0010 C2
+    case 3:AT91C_BASE_PIOA->PIO_CODR = PA_08_D|PA_07_C;                         AT91C_BASE_PIOA->PIO_SODR = PA_06_B|PA_05_A;break;//0011 C3
       
-    case 4:AT91C_BASE_PIOA->PIO_CODR = PA_08_SD_CS_MCDA3|PA_06_HSMCI_MCDA1|PA_05_HSMCI_MCDA0;AT91C_BASE_PIOA->PIO_SODR = PA_07_HSMCI_MCDA2;break;//0100 C4
-    case 5:AT91C_BASE_PIOA->PIO_CODR = PA_08_SD_CS_MCDA3|PA_06_HSMCI_MCDA1;AT91C_BASE_PIOA->PIO_SODR = PA_07_HSMCI_MCDA2|PA_05_HSMCI_MCDA0;break;//0101 C5
-    case 6:AT91C_BASE_PIOA->PIO_CODR = PA_08_SD_CS_MCDA3|PA_05_HSMCI_MCDA0;AT91C_BASE_PIOA->PIO_SODR = PA_07_HSMCI_MCDA2|PA_06_HSMCI_MCDA1;break;//0110 C6
-    case 7:AT91C_BASE_PIOA->PIO_CODR = PA_08_SD_CS_MCDA3;AT91C_BASE_PIOA->PIO_SODR = PA_07_HSMCI_MCDA2|PA_06_HSMCI_MCDA1|PA_05_HSMCI_MCDA0;break;//0111 C7
+    case 4:AT91C_BASE_PIOA->PIO_CODR = PA_08_D|PA_06_B|PA_05_A;                 AT91C_BASE_PIOA->PIO_SODR = PA_07_C;break;//0100 C4
+    case 5:AT91C_BASE_PIOA->PIO_CODR = PA_08_D|PA_06_B;                         AT91C_BASE_PIOA->PIO_SODR = PA_07_C|PA_05_A;break;//0101 C5
+    case 6:AT91C_BASE_PIOA->PIO_CODR = PA_08_D|PA_05_A;                         AT91C_BASE_PIOA->PIO_SODR = PA_07_C|PA_06_B;break;//0110 C6
+    case 7:AT91C_BASE_PIOA->PIO_CODR = PA_08_D;                                 AT91C_BASE_PIOA->PIO_SODR = PA_07_C|PA_06_B|PA_05_A;break;//0111 C7
     
-    case 8: AT91C_BASE_PIOA->PIO_CODR = PA_07_HSMCI_MCDA2|PA_06_HSMCI_MCDA1|PA_05_HSMCI_MCDA0;AT91C_BASE_PIOA->PIO_SODR = PA_08_SD_CS_MCDA3;break;//1000 C8
-    case 9: AT91C_BASE_PIOA->PIO_CODR = PA_07_HSMCI_MCDA2|PA_06_HSMCI_MCDA1;AT91C_BASE_PIOA->PIO_SODR = PA_08_SD_CS_MCDA3|PA_05_HSMCI_MCDA0;break;//1001 C9
-    case 10:AT91C_BASE_PIOA->PIO_CODR = PA_07_HSMCI_MCDA2|PA_05_HSMCI_MCDA0;AT91C_BASE_PIOA->PIO_SODR = PA_08_SD_CS_MCDA3|PA_06_HSMCI_MCDA1;break;//1010 C10
-    case 11:AT91C_BASE_PIOA->PIO_CODR = PA_07_HSMCI_MCDA2;AT91C_BASE_PIOA->PIO_SODR = PA_08_SD_CS_MCDA3|PA_06_HSMCI_MCDA1|PA_05_HSMCI_MCDA0;break;//1011 C11
+    case 8: AT91C_BASE_PIOA->PIO_CODR = PA_07_C|PA_06_B|PA_05_A;                AT91C_BASE_PIOA->PIO_SODR = PA_08_D;break;//1000 C8
+    case 9: AT91C_BASE_PIOA->PIO_CODR = PA_07_C|PA_06_B;                        AT91C_BASE_PIOA->PIO_SODR = PA_08_D|PA_05_A;break;//1001 C9
+    case 10:AT91C_BASE_PIOA->PIO_CODR = PA_07_C|PA_05_A;                        AT91C_BASE_PIOA->PIO_SODR = PA_08_D|PA_06_B;break;//1010 C10
+    case 11:AT91C_BASE_PIOA->PIO_CODR = PA_07_C;                                AT91C_BASE_PIOA->PIO_SODR = PA_08_D|PA_06_B|PA_05_A;break;//1011 C11
     
-    case 12:AT91C_BASE_PIOA->PIO_CODR = PA_06_HSMCI_MCDA1|PA_05_HSMCI_MCDA0;AT91C_BASE_PIOA->PIO_SODR = PA_08_SD_CS_MCDA3|PA_07_HSMCI_MCDA2;break;//1100 C12
-    case 13:AT91C_BASE_PIOA->PIO_CODR = PA_06_HSMCI_MCDA1;AT91C_BASE_PIOA->PIO_SODR = PA_08_SD_CS_MCDA3|PA_07_HSMCI_MCDA2|PA_05_HSMCI_MCDA0;break;//1101 C13
-    case 14:AT91C_BASE_PIOA->PIO_CODR = PA_05_HSMCI_MCDA0;AT91C_BASE_PIOA->PIO_SODR = PA_08_SD_CS_MCDA3|PA_07_HSMCI_MCDA2|PA_06_HSMCI_MCDA1;break;//1110 C14
-    case 15:AT91C_BASE_PIOA->PIO_SODR = PA_08_SD_CS_MCDA3|PA_07_HSMCI_MCDA2|PA_06_HSMCI_MCDA1|PA_05_HSMCI_MCDA0;break;//1111 C15
+    case 12:AT91C_BASE_PIOA->PIO_CODR = PA_06_B|PA_05_A;                        AT91C_BASE_PIOA->PIO_SODR = PA_08_D|PA_07_C;break;//1100 C12
+    case 13:AT91C_BASE_PIOA->PIO_CODR = PA_06_B;                                AT91C_BASE_PIOA->PIO_SODR = PA_08_D|PA_07_C|PA_05_A;break;//1101 C13
+    case 14:AT91C_BASE_PIOA->PIO_CODR = PA_05_A;                                AT91C_BASE_PIOA->PIO_SODR = PA_08_D|PA_07_C|PA_06_B;break;//1110 C14
+    case 15:                                                                    AT91C_BASE_PIOA->PIO_SODR = PA_08_D|PA_07_C|PA_06_B|PA_05_A;break;//1111 C15
   }
 }
 /*-------------------------------------------------------------------------------------------------------------------*/
